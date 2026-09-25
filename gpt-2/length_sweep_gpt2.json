@@ -1,0 +1,51 @@
+{
+  "model_id": "gpt2",
+  "num_layers": 12,
+  "num_kv_heads": 12,
+  "head_dim": 64,
+  "bytes_per_element": 4,
+  "results": [
+    {
+      "seq_len": 8,
+      "measured_bytes": 589824,
+      "theoretical_bytes": 589824,
+      "match": true
+    },
+    {
+      "seq_len": 16,
+      "measured_bytes": 1179648,
+      "theoretical_bytes": 1179648,
+      "match": true
+    },
+    {
+      "seq_len": 32,
+      "measured_bytes": 2359296,
+      "theoretical_bytes": 2359296,
+      "match": true
+    },
+    {
+      "seq_len": 64,
+      "measured_bytes": 4718592,
+      "theoretical_bytes": 4718592,
+      "match": true
+    },
+    {
+      "seq_len": 128,
+      "measured_bytes": 9437184,
+      "theoretical_bytes": 9437184,
+      "match": true
+    },
+    {
+      "seq_len": 256,
+      "measured_bytes": 18874368,
+      "theoretical_bytes": 18874368,
+      "match": true
+    },
+    {
+      "seq_len": 512,
+      "measured_bytes": 37748736,
+      "theoretical_bytes": 37748736,
+      "match": true
+    }
+  ]
+}
