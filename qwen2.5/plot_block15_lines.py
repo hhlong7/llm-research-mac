@@ -11,6 +11,8 @@ PATCH_SETS = [("operator", "Operator token"), ("b_last", "Last digit of b"),
               ("final", "Final prompt token"), ("all_three", "All three positions")]
 DIRECTIONS = [("mul", "Multiplication → addition"), ("add", "Addition → multiplication")]
 COLOR = "#2b2a28"
+BASE_COLOR = "#9a968e"
+CLEAN = plan.index("clean|None")   # row 0: the prompt run with no swap
 
 
 def draw(kind, filename, title):
@@ -20,6 +22,15 @@ def draw(kind, filename, title):
         for c, (patch_set, name) in enumerate(PATCH_SETS):
             ax = axes[r, c]
             idx = [plan.index(f"{patch_set}|{b - 1}") for b in BLOCKS]
+            # no-swap baseline: clean P(original), or the clean fraction of original answers
+            if kind == "prob":
+                base = d[f"{op}_prob_orig"][ok][:, CLEAN].mean()
+            else:
+                base = (d[f"{op}_cat"][ok][:, CLEAN] == "original").mean()
+            ax.axhline(base, color=BASE_COLOR, linewidth=1.5, zorder=0, label="no-swap baseline (original)")
+            if c == 0:
+                ax.text(BLOCKS[0] - 0.05, base + 0.015, f"baseline {base:.2f}", color=BASE_COLOR,
+                        fontsize=8, va="bottom")
             if kind == "prob":
                 lines = [(d[f"{op}_prob_orig"][ok][:, idx].mean(0), "-", "P(original)"),
                          (d[f"{op}_prob_alt"][ok][:, idx].mean(0), "--", "P(other op)")]
@@ -42,7 +53,7 @@ def draw(kind, filename, title):
             if r == 1:
                 ax.set_xlabel("Attention block (1-based)")
     handles, labels = axes[0, 0].get_legend_handles_labels()
-    fig.legend(handles, labels, loc="upper center", ncol=3, frameon=False, bbox_to_anchor=(0.5, 0.95))
+    fig.legend(handles, labels, loc="upper center", ncol=4, frameon=False, bbox_to_anchor=(0.5, 0.95))
     fig.suptitle(title, fontsize=13)
     fig.tight_layout(rect=(0, 0, 1, 0.91))
     fig.savefig(filename, dpi=150)
